@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/dailyNewsFragment"
+        android:title="Daily News"
+        android:icon="@drawable/ic_globe" />
+    <item
+        android:id="@+id/bookmarksFragment"
+        android:title="Bookmarks"
+        android:icon="@drawable/ic_bookmark_default" />
+    <item
+        android:id="@+id/settingsFragment"
+        android:title="Settings"
+        android:icon="@drawable/ic_settings" />
+</menu>

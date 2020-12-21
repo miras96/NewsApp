@@ -7,17 +7,25 @@
 
     <fragment
         android:id="@+id/dailyNewsFragment"
-        android:name="com.example.newsapp.DailyNewsFragment"
+        android:name="com.example.newsapp.ui.dailynews.DailyNewsFragment"
         android:label="Daily News"
-        tools:layout="@layout/fragment_daily_news" />
+        tools:layout="@layout/fragment_daily_news" >
+        <action
+            android:id="@+id/action_dailyNewsFragment_to_webViewFragment"
+            app:destination="@id/webViewFragment" />
+    </fragment>
     <fragment
         android:id="@+id/bookmarksFragment"
-        android:name="com.example.newsapp.BookmarksFragment"
+        android:name="com.example.newsapp.ui.bookmarks.BookmarksFragment"
         android:label="Bookmarks"
         tools:layout="@layout/fragment_bookmarks" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.example.newsapp.SettingsFragment"
+        android:name="com.example.newsapp.ui.settings.SettingsFragment"
         android:label="Settings"
         tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/webViewFragment"
+        android:name="com.example.newsapp.ui.article.WebViewFragment"
+        tools:layout="@layout/fragment_web_view" />
 </navigation>

@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebViewClient
 import com.example.newsapp.databinding.FragmentWebViewBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -31,7 +32,13 @@ class WebViewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let {
             val url = it.getString("url")
+            binding.articleWebView.webViewClient = WebViewClient()
             binding.articleWebView.loadUrl(url)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

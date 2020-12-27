@@ -1,33 +1,33 @@
 package com.example.newsapp.ui.bookmarks
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newsapp.R
+import com.example.newsapp.databinding.FragmentBookmarksBinding
+import com.example.newsapp.models.Article
+import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.activity_main.view.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [BookmarksFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class BookmarksFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+@AndroidEntryPoint
+class BookmarksFragment : Fragment(), BookmarksAdapter.BookmarksItemListener {
+    private var _binding: FragmentBookmarksBinding? = null
+    private val binding get() = _binding!!
+    private val viewModel by viewModels<BookmarksViewModel>()
+    private lateinit var adapter: BookmarksAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
@@ -35,26 +35,53 @@ class BookmarksFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_bookmarks, container, false)
+        _binding = FragmentBookmarksBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment BookmarksFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            BookmarksFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupUI()
+        setupObservers()
+    }
+
+    private fun setupUI() {
+        adapter = BookmarksAdapter(this)
+        with(binding.recyclerViewBookmarks) {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(requireContext()).apply {
+                addItemDecoration(DividerItemDecoration(context, orientation))
             }
+            adapter = this@BookmarksFragment.adapter
+        }
+    }
+
+    private fun setupObservers() {
+        viewModel.getSavedBookmarks().observe(viewLifecycleOwner, Observer {
+            if (!it.isNullOrEmpty()) {
+                adapter.setItems(it.toMutableList().toCollection(arrayListOf()))
+            }
+        })
+        viewModel.status.observe(viewLifecycleOwner, Observer {
+            if (it)
+                Snackbar.make(binding.root, "Removed from bookmarks", Snackbar.LENGTH_SHORT)
+                    .show()
+        })
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onNewsItemClicked(url: String) {
+        findNavController().navigate(
+            R.id.action_bookmarksFragment_to_webViewFragment,
+            bundleOf("url" to url)
+        )
+    }
+
+    override fun onUnsetBookmarkClicked(article: Article) {
+        viewModel.removeFromBookmarks(article)
     }
 }

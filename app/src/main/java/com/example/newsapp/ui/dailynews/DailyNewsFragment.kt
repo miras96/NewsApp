@@ -10,11 +10,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.newsapp.R
 import com.example.newsapp.databinding.FragmentDailyNewsBinding
+import com.example.newsapp.models.Article
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
+import kotlinx.android.synthetic.main.activity_main.view.*
 
 
 @AndroidEntryPoint
@@ -58,6 +59,11 @@ class DailyNewsFragment : Fragment(), DailyNewsAdapter.NewsItemListener {
                 }
             }
         })
+        viewModel.status.observe(viewLifecycleOwner, Observer {
+            if (it)
+                Snackbar.make(binding.root, "Saved to bookmarks", Snackbar.LENGTH_SHORT)
+                    .show()
+        })
     }
 
     override fun onDestroyView() {
@@ -70,5 +76,9 @@ class DailyNewsFragment : Fragment(), DailyNewsAdapter.NewsItemListener {
             R.id.action_dailyNewsFragment_to_webViewFragment,
             bundleOf("url" to url)
         )
+    }
+
+    override fun onSetBookmarkClicked(article: Article) {
+        viewModel.saveToBookmarks(article)
     }
 }

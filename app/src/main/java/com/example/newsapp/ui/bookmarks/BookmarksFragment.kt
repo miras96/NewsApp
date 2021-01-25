@@ -26,6 +26,7 @@ class BookmarksFragment : Fragment(), BookmarksAdapter.BookmarksItemListener {
     private val binding get() = _binding!!
     private val viewModel by viewModels<BookmarksViewModel>()
     private lateinit var adapter: BookmarksAdapter
+    private var articlesList = mutableListOf<Article>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,6 +50,7 @@ class BookmarksFragment : Fragment(), BookmarksAdapter.BookmarksItemListener {
             layoutManager = LinearLayoutManager(requireContext()).apply {
                 addItemDecoration(DividerItemDecoration(context, orientation))
             }
+            itemAnimator
             adapter = this@BookmarksFragment.adapter
         }
     }
@@ -56,7 +58,7 @@ class BookmarksFragment : Fragment(), BookmarksAdapter.BookmarksItemListener {
     private fun setupObservers() {
         viewModel.getSavedBookmarks().observe(viewLifecycleOwner, Observer {
             if (!it.isNullOrEmpty()) {
-                adapter.setItems(it.toMutableList().toCollection(arrayListOf()))
+                articlesList = it.toMutableList().also { adapter.submitList(it) }
             }
         })
         viewModel.status.observe(viewLifecycleOwner, Observer {
@@ -80,5 +82,7 @@ class BookmarksFragment : Fragment(), BookmarksAdapter.BookmarksItemListener {
 
     override fun onUnsetBookmarkClicked(article: Article) {
         viewModel.removeFromBookmarks(article)
+        articlesList.remove(article)
+        adapter.submitList(articlesList)
     }
 }

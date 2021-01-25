@@ -1,10 +1,10 @@
 package com.example.newsapp.models
 
+import androidx.recyclerview.widget.DiffUtil
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "article")
 data class Article(
@@ -16,4 +16,14 @@ data class Article(
     @ColumnInfo(name = "url") val url: String,
     @ColumnInfo(name = "url_to_image") val urlToImage: String,
     @ColumnInfo(name = "published_at") val publishedAt: String
-)
+) {
+    class DiffCallback : DiffUtil.ItemCallback<Article>() {
+        override fun areItemsTheSame(oldItem: Article, newItem: Article): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: Article, newItem: Article): Boolean {
+            return oldItem == newItem
+        }
+    }
+}

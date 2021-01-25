@@ -57,7 +57,7 @@ class DailyNewsFragment : Fragment(), DailyNewsAdapter.NewsItemListener {
             it?.let { response ->
                 when(response.status) {
                     ResponseModel.getPositiveStatus() -> {
-                        if (!response.articles.isNullOrEmpty()) adapter.setItems(response.articles)
+                        if (!response.articles.isNullOrEmpty()) adapter.submitList(response.articles)
                     }
                     ResponseModel.getNegativeStatus() -> {
                         if (!response.code.isNullOrEmpty() && !response.message.isNullOrEmpty()) {

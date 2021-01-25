@@ -13,9 +13,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newsapp.R
 import com.example.newsapp.databinding.FragmentDailyNewsBinding
 import com.example.newsapp.models.Article
+import com.example.newsapp.models.ResponseModel
+import com.example.newsapp.ui.article.WebViewFragment
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.view.*
+import timber.log.Timber
 
 
 @AndroidEntryPoint
@@ -28,7 +31,7 @@ class DailyNewsFragment : Fragment(), DailyNewsAdapter.NewsItemListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentDailyNewsBinding.inflate(inflater, container, false)
         return binding.root
@@ -53,15 +56,20 @@ class DailyNewsFragment : Fragment(), DailyNewsAdapter.NewsItemListener {
         viewModel.getLatestNews().observe(viewLifecycleOwner, Observer {
             it?.let { response ->
                 when(response.status) {
-                    "ok" -> {
+                    ResponseModel.getPositiveStatus() -> {
                         if (!response.articles.isNullOrEmpty()) adapter.setItems(response.articles)
+                    }
+                    ResponseModel.getNegativeStatus() -> {
+                        if (!response.code.isNullOrEmpty() && !response.message.isNullOrEmpty()) {
+                            Timber.e(response.code, response.message)
+                        }
                     }
                 }
             }
         })
         viewModel.status.observe(viewLifecycleOwner, Observer {
             if (it)
-                Snackbar.make(binding.root, "Saved to bookmarks", Snackbar.LENGTH_SHORT)
+                Snackbar.make(binding.root, getString(R.string.saved_to_bookmarks), Snackbar.LENGTH_SHORT)
                     .show()
         })
     }
@@ -74,7 +82,8 @@ class DailyNewsFragment : Fragment(), DailyNewsAdapter.NewsItemListener {
     override fun onNewsItemClicked(url: String) {
         findNavController().navigate(
             R.id.action_dailyNewsFragment_to_webViewFragment,
-            bundleOf("url" to url)
+            bundleOf(WebViewFragment.URL_KEY to url)
+
         )
     }
 

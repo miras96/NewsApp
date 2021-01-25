@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newsapp.R
 import com.example.newsapp.databinding.FragmentBookmarksBinding
 import com.example.newsapp.models.Article
+import com.example.newsapp.ui.article.WebViewFragment
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.view.*
@@ -26,14 +27,10 @@ class BookmarksFragment : Fragment(), BookmarksAdapter.BookmarksItemListener {
     private val viewModel by viewModels<BookmarksViewModel>()
     private lateinit var adapter: BookmarksAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentBookmarksBinding.inflate(inflater, container, false)
         return binding.root
@@ -64,7 +61,7 @@ class BookmarksFragment : Fragment(), BookmarksAdapter.BookmarksItemListener {
         })
         viewModel.status.observe(viewLifecycleOwner, Observer {
             if (it)
-                Snackbar.make(binding.root, "Removed from bookmarks", Snackbar.LENGTH_SHORT)
+                Snackbar.make(binding.root, getString(R.string.removed_from_bookmarks), Snackbar.LENGTH_SHORT)
                     .show()
         })
     }
@@ -77,7 +74,7 @@ class BookmarksFragment : Fragment(), BookmarksAdapter.BookmarksItemListener {
     override fun onNewsItemClicked(url: String) {
         findNavController().navigate(
             R.id.action_bookmarksFragment_to_webViewFragment,
-            bundleOf("url" to url)
+            bundleOf(WebViewFragment.URL_KEY to url)
         )
     }
 

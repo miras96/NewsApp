@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.example.newsapp.R
 import com.example.newsapp.databinding.BookmarksListItemBinding
 import com.example.newsapp.models.Article
 import com.example.newsapp.utils.Utils
@@ -33,17 +34,17 @@ class BookmarksAdapter(private val listener: BookmarksItemListener) :
         init {
             // Define click listener for the ViewHolder's View.
             binding.root.setOnClickListener {
-                Timber.d("RecyclerView item clicked!")
+                Timber.d(it.context.getString(R.string.list_item_clicked_message))
                 listener.onNewsItemClicked(dataSet[adapterPosition].url)
             }
 
             binding.unsetBookmarkImageView.setOnClickListener {
-                Timber.d("Unset bookmark clicked!")
+                Timber.d(it.context.getString(R.string.unset_bookmark_clicked_message))
                 listener.onUnsetBookmarkClicked(dataSet[adapterPosition])
             }
 
             binding.moreActionsImageView.setOnClickListener {
-                Timber.d("More button clicked")
+                Timber.d(it.context.getString(R.string.more_button_clicked_message))
             }
         }
     }
@@ -56,15 +57,15 @@ class BookmarksAdapter(private val listener: BookmarksItemListener) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // Get element from your dataSet at this position and replace the
         // contents of the view with that element
-        with(holder) {
-            binding.sourceTextView.text = dataSet[position].source.name
-            binding.descriptionTextView.text = dataSet[position].description
-            binding.dateTextView.text = Utils.parseDate(dataSet[position].publishedAt)
-            Glide.with(binding.root)
+        with(holder.binding) {
+            sourceTextView.text = dataSet[position].source.name
+            descriptionTextView.text = dataSet[position].description
+            dateTextView.text = Utils.parseDate(dataSet[position].publishedAt, root.context)
+            Glide.with(root)
                 .load(dataSet[position].urlToImage)
                 .fitCenter()
                 .transition(DrawableTransitionOptions.withCrossFade())
-                .into(binding.articleLittleImageView)
+                .into(articleLittleImageView)
         }
     }
 

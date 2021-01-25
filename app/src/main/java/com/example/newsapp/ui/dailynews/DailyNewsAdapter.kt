@@ -33,12 +33,12 @@ class DailyNewsAdapter(private val listener: NewsItemListener) :
         init {
             // Define click listener for the ViewHolder's View.
             binding.root.setOnClickListener {
-                Timber.d("RecyclerView item clicked!")
+                Timber.d(it.context.getString(R.string.list_item_clicked_message))
                 listener.onNewsItemClicked(dataSet[adapterPosition].url)
             }
 
             binding.setBookmarkImageView.setOnClickListener {
-                Timber.d("Bookmark clicked!")
+                Timber.d(it.context.getString(R.string.set_bookmark_clicked_message))
                 listener.onSetBookmarkClicked(dataSet[adapterPosition])
 
                 fun paintOverBookmarkIcon() {
@@ -47,7 +47,7 @@ class DailyNewsAdapter(private val listener: NewsItemListener) :
             }
 
             binding.moreImageView.setOnClickListener {
-                Timber.d("More button clicked")
+                Timber.d(it.context.getString(R.string.more_button_clicked_message))
             }
         }
     }
@@ -60,14 +60,14 @@ class DailyNewsAdapter(private val listener: NewsItemListener) :
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         // Get element from your dataSet at this position and replace the
         // contents of the view with that element
-        with(viewHolder) {
-            binding.articleSourceTextView.text = dataSet[position].source.name
-            binding.articleTitleTextView.text = dataSet[position].title
-            Glide.with(binding.root)
+        with(viewHolder.binding) {
+            articleSourceTextView.text = dataSet[position].source.name
+            articleTitleTextView.text = dataSet[position].title
+            Glide.with(root)
                 .load(dataSet[position].urlToImage)
                 .fitCenter()
                 .transition(DrawableTransitionOptions.withCrossFade())
-                .into(binding.articleImageView)
+                .into(articleImageView)
         }
     }
 

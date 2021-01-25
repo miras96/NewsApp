@@ -23,7 +23,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="TextView"
         app:layout_constraintStart_toStartOf="@+id/articleImageView"
         app:layout_constraintTop_toBottomOf="@+id/articleImageView" />
 
@@ -42,7 +41,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="TextView"
         app:layout_constraintEnd_toStartOf="@+id/setBookmarkImageView"
         app:layout_constraintStart_toStartOf="@+id/articleSourceTextView"
         app:layout_constraintTop_toBottomOf="@+id/articleSourceTextView" />

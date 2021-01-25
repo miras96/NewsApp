@@ -1,12 +1,20 @@
 package com.example.newsapp.utils
 
+import android.content.Context
+import com.example.newsapp.R
+import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.util.*
 
 object Utils {
-    fun parseDate(dateString: String): String? {
-        val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
-        val date = format.parse(dateString)
-        format.applyLocalizedPattern("dd MMMM, yyyy")
-        return format.format(date!!)
+
+    fun parseDate(dateString: String, context: Context): String {
+        val format = SimpleDateFormat(context.getString(R.string.input_date_format), Locale.US)
+        val date = try {
+            format.parse(dateString)
+        } catch (e: ParseException) { null }
+        format.applyLocalizedPattern(context.getString(R.string.output_date_format))
+        date?.let { return format.format(it) }
+        return ""
     }
 }

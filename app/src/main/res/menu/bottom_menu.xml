@@ -3,14 +3,14 @@
 
     <item
         android:id="@+id/dailyNewsFragment"
-        android:title="Daily News"
+        android:title="@string/title_daily_news"
         android:icon="@drawable/ic_globe" />
     <item
         android:id="@+id/bookmarksFragment"
-        android:title="Bookmarks"
+        android:title="@string/title_bookmarks"
         android:icon="@drawable/ic_bookmark_default" />
     <item
         android:id="@+id/settingsFragment"
-        android:title="Settings"
+        android:title="@string/title_settings"
         android:icon="@drawable/ic_settings" />
 </menu>

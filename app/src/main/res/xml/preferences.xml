@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ListPreference
+        app:key="@string/preference_key_country"
+        app:title="@string/preference_title_country"
+        android:defaultValue="@string/country_default_value"
+        android:entries="@array/country_code_entries"
+        android:entryValues="@array/country_code_values"
+        android:summary="@string/country_default_value"
+        app:dialogTitle="@string/preference_dialog_title_country"/>
+
+    <SwitchPreferenceCompat
+        app:key="@string/preference_key_notifications"
+        app:title="@string/preference_title_notification"
+        android:summary="@string/preference_summary_notification"/>
+
+    <SwitchPreferenceCompat
+        app:key="@string/preference_key_sound"
+        app:title="@string/preference_title_sound"
+        android:summary="@string/preference_summary_sound"/>
+
+    <ListPreference
+        app:key="@string/preference_key_auto_play_videos"
+        app:title="@string/preference_title_auto_play_videos"
+        android:defaultValue="@string/auto_play_videos_default_value"
+        android:entries="@array/auto_play_videos_variants"
+        android:entryValues="@array/auto_play_videos_variants"
+        android:summary="@string/auto_play_videos_default_value"
+        app:dialogTitle="@string/preference_dialog_title_auto_play_videos"/>
+
+    <Preference
+        app:key="@string/preference_key_article_text_size"
+        app:title="@string/preference_title_article_text_size"
+        android:defaultValue="@string/article_text_size_default_value"
+        app:summary="@string/article_text_size_default_value"/>
+</PreferenceScreen>

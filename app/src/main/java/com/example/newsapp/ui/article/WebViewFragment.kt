@@ -12,17 +12,16 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class WebViewFragment : Fragment() {
+    companion object {
+        const val URL_KEY = "url"
+    }
     private var _binding: FragmentWebViewBinding? = null
     private val binding get() = _binding!!
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentWebViewBinding.inflate(inflater, container, false)
         return binding.root
@@ -31,7 +30,7 @@ class WebViewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let {
-            val url = it.getString("url")
+            val url = it.getString(URL_KEY)
             binding.articleWebView.webViewClient = WebViewClient()
             binding.articleWebView.loadUrl(url)
         }

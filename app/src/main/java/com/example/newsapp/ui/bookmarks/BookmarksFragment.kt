@@ -15,6 +15,7 @@ import com.example.newsapp.R
 import com.example.newsapp.databinding.FragmentBookmarksBinding
 import com.example.newsapp.models.Article
 import com.example.newsapp.ui.article.WebViewFragment
+import com.example.newsapp.utils.Utils
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.view.*
@@ -76,7 +77,7 @@ class BookmarksFragment : Fragment(), BookmarksAdapter.BookmarksItemListener {
     override fun onNewsItemClicked(url: String) {
         findNavController().navigate(
             R.id.action_bookmarksFragment_to_webViewFragment,
-            bundleOf(WebViewFragment.URL_KEY to url)
+            bundleOf(Utils.URL_KEY to url)
         )
     }
 
@@ -84,5 +85,12 @@ class BookmarksFragment : Fragment(), BookmarksAdapter.BookmarksItemListener {
         viewModel.removeFromBookmarks(article)
         articlesList.remove(article)
         adapter.submitList(articlesList)
+    }
+
+    override fun onMoreClicked(url: String) {
+        findNavController().navigate(
+            R.id.action_bookmarksFragment_to_bottomSheetFragment,
+            bundleOf(Utils.URL_KEY to url)
+        )
     }
 }

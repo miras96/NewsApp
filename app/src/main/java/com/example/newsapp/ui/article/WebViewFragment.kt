@@ -7,14 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebViewClient
 import com.example.newsapp.databinding.FragmentWebViewBinding
+import com.example.newsapp.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
 class WebViewFragment : Fragment() {
-    companion object {
-        const val URL_KEY = "url"
-    }
     private var _binding: FragmentWebViewBinding? = null
     private val binding get() = _binding!!
 
@@ -30,7 +28,7 @@ class WebViewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let {
-            val url = it.getString(URL_KEY)
+            val url = it.getString(Utils.URL_KEY)
             binding.articleWebView.webViewClient = WebViewClient()
             binding.articleWebView.loadUrl(url)
         }

@@ -15,7 +15,8 @@ data class Article(
     @ColumnInfo(name = "description") val description: String,
     @ColumnInfo(name = "url") val url: String,
     @ColumnInfo(name = "url_to_image") val urlToImage: String,
-    @ColumnInfo(name = "published_at") val publishedAt: String
+    @ColumnInfo(name = "published_at") val publishedAt: String,
+    var savedToBookmarks: Boolean
 ) {
     class DiffCallback : DiffUtil.ItemCallback<Article>() {
         override fun areItemsTheSame(oldItem: Article, newItem: Article): Boolean {

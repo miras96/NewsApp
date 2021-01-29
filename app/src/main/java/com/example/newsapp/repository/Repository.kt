@@ -8,8 +8,6 @@ import com.example.newsapp.R
 import com.example.newsapp.models.Article
 import com.example.newsapp.repository.retrofit.RetrofitService
 import com.example.newsapp.repository.room.ArticleDao
-import dagger.hilt.android.qualifiers.ActivityContext
-import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 class Repository @Inject constructor(
@@ -25,7 +23,12 @@ class Repository @Inject constructor(
 
     suspend fun getArticles() = articleDao.getAllArticles()
 
-    suspend fun saveArticle(article: Article) = articleDao.insert(article)
+    suspend fun saveArticle(article: Article): Long {
+        articleDao.getArticle(article.url)?.let {
+            return it.id.toLong()
+        }
+        return articleDao.insert(article)
+    }
 
     suspend fun deleteArticle(article: Article) = articleDao.delete(article)
 

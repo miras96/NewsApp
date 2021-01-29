@@ -5,6 +5,7 @@
     <string name="title_daily_news">Daily News</string>
     <string name="title_bookmarks">Bookmarks</string>
     <string name="title_settings">Settings</string>
+    <string name="title_bottom_sheet_list_dialog">Bottom sheet</string>
     <string name="input_date_format">yyyy-MM-dd\'T\'HH:mm:ss\'Z\'</string>
     <string name="output_date_format">dd MMMM, yyyy</string>
     <string name="saved_to_bookmarks">Saved to bookmarks</string>
@@ -37,4 +38,7 @@
     <string name="preference_dialog_title_auto_play_videos">Choose auto-play videos</string>
 
     <string name="app_database_article_table">article</string>
+
+    <string name="share">Share</string>
+    <string name="go_to_source">Go to source</string>
 </resources>

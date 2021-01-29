@@ -19,6 +19,7 @@ class BookmarksAdapter(private val listener: BookmarksItemListener) :
     interface BookmarksItemListener {
         fun onNewsItemClicked(url: String)
         fun onUnsetBookmarkClicked(article: Article)
+        fun onMoreClicked(url: String)
     }
 
     inner class ViewHolder(val binding: BookmarksListItemBinding, private val listener: BookmarksItemListener) :
@@ -27,7 +28,7 @@ class BookmarksAdapter(private val listener: BookmarksItemListener) :
         fun bind(article: Article) = with(binding) {
             sourceTextView.text = article.source.name
             descriptionTextView.text = article.description
-            dateTextView.text = article.publishedAt
+            dateTextView.text = Utils.parseDate(article.publishedAt, root.context)
             Glide.with(root)
                 .load(article.urlToImage)
                 .fitCenter()
@@ -45,6 +46,7 @@ class BookmarksAdapter(private val listener: BookmarksItemListener) :
             }
             moreActionsImageView.setOnClickListener {
                 Timber.d(it.context.getString(R.string.more_button_clicked_message))
+                listener.onMoreClicked(article.url)
             }
         }
     }

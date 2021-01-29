@@ -15,6 +15,7 @@ import com.example.newsapp.databinding.FragmentDailyNewsBinding
 import com.example.newsapp.models.Article
 import com.example.newsapp.models.ResponseModel
 import com.example.newsapp.ui.article.WebViewFragment
+import com.example.newsapp.utils.Utils
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.view.*
@@ -57,7 +58,7 @@ class DailyNewsFragment : Fragment(), DailyNewsAdapter.NewsItemListener {
             it?.let { response ->
                 when(response.status) {
                     ResponseModel.getPositiveStatus() -> {
-                        if (!response.articles.isNullOrEmpty()) adapter.submitList(response.articles)
+                        if (!response.articles.isNullOrEmpty()) updateAdapter(response.articles)
                     }
                     ResponseModel.getNegativeStatus() -> {
                         if (!response.code.isNullOrEmpty() && !response.message.isNullOrEmpty()) {
@@ -74,6 +75,23 @@ class DailyNewsFragment : Fragment(), DailyNewsAdapter.NewsItemListener {
         })
     }
 
+    private fun updateAdapter(latestNews: ArrayList<Article>) {
+        fun List<Article>.containsArticle(article: Article): Boolean {
+            for (item in this) {
+                if (item.url == article.url) return true
+            }
+            return false
+        }
+
+        val bookmarks = viewModel.getBookmarks()
+        latestNews.forEach {
+            if (bookmarks.containsArticle(it)) {
+                it.savedToBookmarks = true
+            }
+        }
+        adapter.submitList(latestNews)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -82,12 +100,18 @@ class DailyNewsFragment : Fragment(), DailyNewsAdapter.NewsItemListener {
     override fun onNewsItemClicked(url: String) {
         findNavController().navigate(
             R.id.action_dailyNewsFragment_to_webViewFragment,
-            bundleOf(WebViewFragment.URL_KEY to url)
-
+            bundleOf(Utils.URL_KEY to url)
         )
     }
 
     override fun onSetBookmarkClicked(article: Article) {
         viewModel.saveToBookmarks(article)
+    }
+
+    override fun onMoreClicked(url: String) {
+        findNavController().navigate(
+            R.id.action_dailyNewsFragment_to_bottomSheetFragment,
+            bundleOf(Utils.URL_KEY to url)
+        )
     }
 }

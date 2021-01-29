@@ -8,6 +8,9 @@ interface ArticleDao {
     @Query("SELECT * FROM article")
     suspend fun getAllArticles(): List<Article>
 
+    @Query("SELECT * FROM article WHERE url = :url")
+    suspend fun getArticle(url: String): Article?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(article: Article): Long
 

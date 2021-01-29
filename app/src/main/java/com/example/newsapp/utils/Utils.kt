@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 object Utils {
+    const val URL_KEY = "url"
 
     fun parseDate(dateString: String, context: Context): String {
         val format = SimpleDateFormat(context.getString(R.string.input_date_format), Locale.US)

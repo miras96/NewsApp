@@ -16,13 +16,25 @@ class DailyNewsViewModel @ViewModelInject constructor(
     val status: LiveData<Boolean> = _status
 
     private val latestNews = liveData<ResponseModel>(Dispatchers.IO) {
+        bookmarksList = repository.getArticles()
         emit(repository.loadLatestNews())
     }
 
+    private lateinit var bookmarksList: List<Article>
+
+    private val bookmarks = liveData<List<Article>> {
+        latestNews.switchMap {
+            liveData {
+                emit(repository.getArticles())
+            }
+        }
+    }
+
     fun getLatestNews() = latestNews
+    fun getBookmarks() = bookmarksList
 
     fun saveToBookmarks(article: Article) = viewModelScope.launch(Dispatchers.IO) {
         val id = repository.saveArticle(article)
-        _status.postValue(true)
+        if (id >= 0) _status.postValue(true)
     }
 }

@@ -2,7 +2,6 @@ package com.example.newsapp.ui.dailynews
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -19,6 +18,7 @@ class DailyNewsAdapter(private val listener: NewsItemListener) :
     interface NewsItemListener {
         fun onNewsItemClicked(url: String)
         fun onSetBookmarkClicked(article: Article)
+        fun onMoreClicked(url: String)
     }
 
     inner class ViewHolder(val binding: NewsListItemBinding, private val listener: NewsItemListener) :
@@ -27,6 +27,7 @@ class DailyNewsAdapter(private val listener: NewsItemListener) :
         fun bind(article: Article) = with(binding) {
             articleSourceTextView.text = article.source.name
             articleTitleTextView.text = article.title
+            if (article.savedToBookmarks) setBookmarkImageView.setImageResource(R.drawable.ic_bookmark_default)
             Glide.with(root)
                 .load(article.urlToImage)
                 .fitCenter()
@@ -39,14 +40,15 @@ class DailyNewsAdapter(private val listener: NewsItemListener) :
             }
             setBookmarkImageView.setOnClickListener {
                 Timber.d(it.context.getString(R.string.set_bookmark_clicked_message))
-                listener.onSetBookmarkClicked(article)
-
                 fun paintOverBookmarkIcon() {
-                    binding.setBookmarkImageView.setImageResource(R.drawable.ic_bookmark_default)
+                    setBookmarkImageView.setImageResource(R.drawable.ic_bookmark_default)
                 }
+                listener.onSetBookmarkClicked(article)
+                paintOverBookmarkIcon()
             }
             moreImageView.setOnClickListener {
                 Timber.d(it.context.getString(R.string.more_button_clicked_message))
+                listener.onMoreClicked(article.url)
             }
         }
     }
